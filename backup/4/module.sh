@@ -1,0 +1,1 @@
+terraform state mv azurerm_storage_account.storage module.storage.azurerm_storage_account.storage

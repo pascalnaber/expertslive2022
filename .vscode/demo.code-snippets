@@ -1,0 +1,122 @@
+{
+    "tf1rg": {
+        "prefix": "tf1rg",
+        "body": [
+            "resource \"azurerm_resource_group\" \"rg\" {",
+            "  name\t   = \"rg-expertslive-terraform\"",
+            "  location = \"westeurope\"",
+            "}   "
+        ]
+    },
+
+    "tf1storage": {
+        "prefix": "tf1storage",
+        "body": [
+            "resource \"azurerm_storage_account\" \"storage\" {",
+            "  name\t\t\t\t\t\t\t   = \"saterraform564\"",
+            "  resource_group_name\t\t = azurerm_resource_group.rg.name",
+            "  location\t\t\t\t\t\t = azurerm_resource_group.rg.location",
+            "  account_tier\t\t\t\t   = \"Standard\"",
+            "  account_replication_type = \"LRS\"",
+            "  tags\t\t\t\t\t = {}",
+            "}"
+        ]
+    },
+
+    "tf1vnet": {
+        "prefix": "tf1vnet",
+        "body": [
+            "resource \"azurerm_virtual_network\" \"vnet\" {",
+            "  name\t\t\t\t= \"vnet-terraform-expertslive\"",
+            "  resource_group_name = azurerm_resource_group.rg.name",
+            "  location\t\t\t= azurerm_resource_group.rg.location",
+            "  address_space\t   = [\"10.0.0.0/16\"]",
+            "}"
+        ]
+    },
+
+    "tf1provider": {
+        "prefix": "tf1provider",
+        "body": [
+            "provider \"azurerm\" {",
+            "  features {\t",
+            "  }",
+            "}"
+        ]
+    },
+
+    "tf2tags": {
+        "prefix": "tf2tags",
+        "body": [
+            "tags = {",
+            "\tEnvironment = \"nonprod\"",
+            "\tTeam\t\t= \"Freelancers\"",
+            "\tProject\t = \"ExpertsLive\"",
+            "  }"
+        ]
+    },
+
+    "tf2acr": {
+        "prefix": "tf2acr",
+        "body": [
+            "data \"azurerm_container_registry\" \"acr\" {",
+            "  name\t\t\t\t= \"acrbicepvsterraform\"",
+            "  resource_group_name = \"rg-bicep-vs-terraform\"",
+            "} "
+        ]
+    },
+    
+    "tf2role": {
+        "prefix": "tf2role",
+        "body": [
+            "resource \"azurerm_role_assignment\" \"acrroleassignment\" {",
+            "  principal_id\t\t\t\t\t= \"d9141928-c9bb-47c1-abd0-8ec791934181\"",
+            "  role_definition_name\t= \"AcrPull\"",
+            "  scope\t\t\t\t\t\t\t\t= data.azurerm_container_registry.acr.id",
+            "}"
+        ]
+    },
+
+    "tf3user": {
+        "prefix": "tf3user",
+        "body": [
+            "data \"azuread_user\" \"user\" {",
+            "  user_principal_name = \"pascal@pascalnaberoutlook.onmicrosoft.com\"",
+            "}"
+        ]
+    },
+
+    "tf3provider": {
+        "prefix": "tf3provider",
+        "body": [
+            "provider \"azuread\" {",
+            "}"
+        ]
+    },
+
+    "tf4module": {
+        "prefix": "tf4module",
+        "body": [
+            "module \"storage\" {",
+            "  source = \"./modules/storage_account\"",
+            "",
+            "  name\t\t\t\t\t\t= \"saterraform564\"",
+            "  resource_group_name = azurerm_resource_group.rg.name",
+            "  location\t\t\t\t  = azurerm_resource_group.rg.location",
+            "}"
+        ]
+    },
+
+    "tf4github": {
+        "prefix": "tf4github",
+        "body": [
+            "module \"storage\" {",
+            "  source = \"github.com/pascalnaber/terraformdemomodules/storage_account\"",
+            "",
+            "  name\t\t\t\t\t\t= \"saterraform564\"",
+            "  resource_group_name = azurerm_resource_group.rg.name",
+            "  location\t\t\t\t  = azurerm_resource_group.rg.location",
+            "}"
+        ]
+    }
+}
